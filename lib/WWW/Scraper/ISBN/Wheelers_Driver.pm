@@ -4,13 +4,13 @@ use strict;
 use warnings;
 
 use vars qw($VERSION @ISA);
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 #--------------------------------------------------------------------------
 
 =head1 NAME
 
-WWW::Scraper::ISBN::Wheelers_Driver - Search driver for Wheelers' online catalog.
+WWW::Scraper::ISBN::Wheelers_Driver - Search drivers for Wheelers online book catalog.
 
 =head1 SYNOPSIS
 
