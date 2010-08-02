@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw($VERSION @ISA);
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 #--------------------------------------------------------------------------
 
@@ -86,15 +86,15 @@ sub search {
 	$self->found(0);
 	$self->book(undef);
 
-	my $mechanize = WWW::Mechanize->new();
-    $mechanize->agent_alias( 'Linux Mozilla' );
-	$mechanize->get( SEARCH . $isbn );
+	my $mech = WWW::Mechanize->new();
+    $mech->agent_alias( 'Linux Mozilla' );
 
+    eval { $mech->get( SEARCH . $isbn ) };
     return $self->handler("Wheelers website appears to be unavailable.")
-	    unless($mechanize->success());
+	    unless($@ || $mech->success());
 
 	# The Book page
-    my $html = $mechanize->content();
+    my $html = $mech->content();
 
 	return $self->handler("Failed to find that book on Wheelers website.")
 		if($html =~ m!Your search returned <b>0 results</b>!si);
@@ -116,7 +116,7 @@ sub search {
     ($data->{weight})                   = $html =~ m!<tr>\s*<th>Weight</th>\s*<td>(\d+)g</td>\s*</tr>!s;
     ($data->{description})              = $html =~ m!<h2>Description of this book</h2>\s*<p>([^<]+)</p>!;
 
-    my $base = $mechanize->uri();
+    my $base = $mech->uri();
     $base =~ s!(http://[^/]+).*!$1!;
 
 #use Data::Dumper;
@@ -135,7 +135,7 @@ sub search {
 		'isbn'			=> $data->{isbn13},
 		'author'		=> $data->{author},
 		'title'			=> $data->{title},
-		'book_link'		=> $mechanize->uri(),
+		'book_link'		=> $mech->uri(),
 		'image_link'	=> $base . $data->{image},
 		'thumb_link'	=> $base . $data->{thumb},
 		'description'	=> $data->{description},
@@ -172,6 +172,18 @@ L<WWW::Scraper::ISBN>,
 L<WWW::Scraper::ISBN::Record>,
 L<WWW::Scraper::ISBN::Driver>
 
+=head1 BUGS, PATCHES & FIXES
+
+There are no known bugs at the time of this release. However, if you spot a
+bug or are experiencing difficulties that are not explained within the POD
+documentation, please send an email to barbie@cpan.org or submit a bug to the
+RT system (http://rt.cpan.org/Public/Dist/Display.html?Name=WWW-Scraper-ISBN-Wheelers_Driver).
+However, it would help greatly if you are able to pinpoint problems or even
+supply a patch.
+
+Fixes are dependant upon their severity and my availablity. Should a fix not
+be forthcoming, please feel free to (politely) remind me.
+
 =head1 AUTHOR
 
   Barbie, <barbie@cpan.org>
@@ -179,7 +191,7 @@ L<WWW::Scraper::ISBN::Driver>
 
 =head1 COPYRIGHT & LICENSE
 
-  Copyright (C) 2004-2010 Barbie for Miss Barbell Productions
+  Copyright (C) 2010 Barbie for Miss Barbell Productions
 
   This module is free software; you can redistribute it and/or
   modify it under the Artistic Licence v2.
