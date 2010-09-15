@@ -1,7 +1,7 @@
 {
     "name": "WWW-Scraper-ISBN-Wheelers_Driver",
-    "version": "0.04",
-    "abstract": "Search drivers for Wheelers online book catalog.",
+    "version": "0.05",
+    "abstract": "Search driver for Wheelers online book catalog.",
     "author": ["Barbie <barbie@cpan.org>"],
 
     "license": "artistic_2",
@@ -43,7 +43,7 @@
     "provides": {
         "WWW::Scraper::ISBN::Wheelers_Driver": {
             "file": "lib/WWW/Scraper/ISBN/Wheelers_Driver.pm",
-            "version": "0.04"
+            "version": "0.05"
         }
     },
     "no_index": {
