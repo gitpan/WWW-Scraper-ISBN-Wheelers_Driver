@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw($VERSION @ISA);
-$VERSION = '0.05';
+$VERSION = '0.06';
 
 #--------------------------------------------------------------------------
 
@@ -50,8 +50,8 @@ use constant	SEARCH	=> 'http://www.wheelers.co.nz/search/results/?query=';
 
 =item C<search()>
 
-Creates a query string, then passes the appropriate form fields to the Wheelers
-server.
+Creates a query string, then passes the appropriate form fields to the 
+Wheelers server.
 
 The returned page should be the correct catalog page for that ISBN. If not the
 function returns zero and allows the next driver in the chain to have a go. If
