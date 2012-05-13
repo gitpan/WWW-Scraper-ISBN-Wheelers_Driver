@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw($VERSION @ISA);
-$VERSION = '0.07';
+$VERSION = '0.08';
 
 #--------------------------------------------------------------------------
 
@@ -99,11 +99,11 @@ sub search {
 	return $self->handler("Failed to find that book on Wheelers website.")
 		if($html =~ m!Your search returned <b>0 results</b>!si);
     
-#print STDERR "\n# content1=[\n$html\n]\n";
+#print STDERR "\n# html=[\n$html\n]\n";
 
     my $data;
-    ($data->{image})                    = $html =~ m!(/resource/product/large/\d+/\d+.jpg)!i;
-    ($data->{thumb})                    = $html =~ m!(/resource/product/small/\d+/\d+.jpg)!i;
+    ($data->{image})                    = $html =~ m!href="(.*?/large/\d+/\d+.jpg)!i;
+    ($data->{thumb})                    = $html =~ m!src="(.*?/small/\d+/\d+.jpg)!i;
     ($data->{author})                   = $html =~ m!<title>\s*.*?by ([^-]+)- ISBN:[^<]+</title><!i;
     ($data->{title})                    = $html =~ m!<a id="title" name="title"></a>\s*<h1>([^,<]+)</h1>!i;
     ($data->{publisher})                = $html =~ m!<th>Publisher</th>\s*<td><a[^>]+>([^<]+)</a></td>!i;
@@ -112,9 +112,15 @@ sub search {
     ($data->{isbn10})                   = $html =~ m!<th>ISBN-10</th>\s*<td>(\d+)</td>!i;
     ($data->{binding})                  = $html =~ m!<th>Format</th>\s*<td>([^<]+)</td>!s;
     ($data->{pages})                    = $html =~ m!<th>Number of Pages</th>\s*<td>([^<]+)</td>!s;
-    ($data->{width},$data->{height})    = $html =~ m!<tr>\s*<th>Dimensions</th>\s*<td>Width:\s*([\d.]+)mm<br />Height:\s*([\d.]+)mm<br /></td>\s*</tr>!s;
+    ($data->{width},$data->{height})    = $html =~ m!<tr>\s*<th>Dimensions</th>\s*<td>Width:\s*([\d.]+)mm<br />Height:\s*([\d.]+)mm<br />(?:Spine:\s*([\d.]+)mm)?</td>\s*</tr>!s;
     ($data->{weight})                   = $html =~ m!<tr>\s*<th>Weight</th>\s*<td>(\d+)g</td>\s*</tr>!s;
-    ($data->{description})              = $html =~ m!<h2>Description of this book</h2>\s*<p>([^<]+)</p>!;
+    ($data->{description})              = $html =~ m!<h2>Description of this book</h2>\s*<p>([^<]+)</p>!i;
+
+    for(qw(image thumb)) {
+        next unless(defined $data->{$_});
+        next if($data->{$_} =~ m!^http://!);
+        $data->{$_} =~ s!^//!http://!;
+    }
 
     my $base = $mech->uri();
     $base =~ s!(http://[^/]+).*!$1!;
@@ -136,8 +142,8 @@ sub search {
 		'author'		=> $data->{author},
 		'title'			=> $data->{title},
 		'book_link'		=> $mech->uri(),
-		'image_link'	=> $base . $data->{image},
-		'thumb_link'	=> $base . $data->{thumb},
+		'image_link'	=> $data->{image},
+		'thumb_link'	=> $data->{thumb},
 		'description'	=> $data->{description},
 		'pubdate'		=> $data->{pubdate},
 		'publisher'		=> $data->{publisher},
@@ -181,7 +187,7 @@ RT system (http://rt.cpan.org/Public/Dist/Display.html?Name=WWW-Scraper-ISBN-Whe
 However, it would help greatly if you are able to pinpoint problems or even
 supply a patch.
 
-Fixes are dependant upon their severity and my availablity. Should a fix not
+Fixes are dependent upon their severity and my availability. Should a fix not
 be forthcoming, please feel free to (politely) remind me.
 
 =head1 AUTHOR
@@ -191,7 +197,7 @@ be forthcoming, please feel free to (politely) remind me.
 
 =head1 COPYRIGHT & LICENSE
 
-  Copyright (C) 2010,2011 Barbie for Miss Barbell Productions
+  Copyright (C) 2010-2012 Barbie for Miss Barbell Productions
 
   This module is free software; you can redistribute it and/or
   modify it under the Artistic Licence v2.
