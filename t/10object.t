@@ -1,7 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
 
-use lib './t';
 use Test::More tests => 46;
 use WWW::Scraper::ISBN;
 
@@ -27,7 +26,7 @@ my %tests = (
         [ 'is',     'weight',       190             ],
         [ 'is',     'image_link',   'http://r.wheelers.co/bk/large/978009/9780099547938.jpg' ],
         [ 'is',     'thumb_link',   'http://r.wheelers.co/bk/small/978009/9780099547938.jpg' ],
-        [ 'like',   'description',  qr|John Grisham takes you into the heart of America's Deep South| ],
+        [ 'like',   'description',  qr|John Grisham takes you into the heart of America| ],
         [ 'like',   'book_link',    qr|http://www.wheelers.co.nz/books/9780099547938-| ]
     ],
     '9780007203055' => [
