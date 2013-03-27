@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 
+use Data::Dumper;
 use Test::More tests => 46;
 use WWW::Scraper::ISBN;
 
@@ -19,7 +20,7 @@ my %tests = (
         [ 'is',     'author',       'John Grisham'  ],
         [ 'is',     'publisher',    'Cornerstone'   ],
         [ 'is',     'pubdate',      '27 May 2010'   ],
-        [ 'is',     'binding',      'Paperback'     ],
+        [ 'like',   'binding',      qr/Paperback/   ],
         [ 'is',     'pages',        352             ],
         [ 'is',     'width',        110             ],
         [ 'is',     'height',       178             ],
@@ -85,8 +86,8 @@ SKIP: {
     }
 
     for my $isbn (keys %tests) {
-        $record = $scraper->search($isbn);
-        my $error  = $record->error || '';
+        eval { $record = $scraper->search($isbn) };
+        my $error = $@ || $record->error || '';
 
         SKIP: {
             skip "Website unavailable", scalar(@{ $tests{$isbn} }) + 2   
@@ -94,13 +95,14 @@ SKIP: {
             skip "Book unavailable", scalar(@{ $tests{$isbn} }) + 2   
                 if($error =~ /Failed to find that book/ || !$record->found);
 
-            unless($record->found) {
-                diag($record->error);
+            unless($record && $record->found) {
+                diag("error=$error, record error=".$record->error);
             }
 
             is($record->found,1);
             is($record->found_in,$DRIVER);
 
+            my $fail = 0;
             my $book = $record->book;
             for my $test (@{ $tests{$isbn} }) {
                 if($test->[0] eq 'ok')          { ok(       $book->{$test->[1]},             ".. '$test->[1]' found [$isbn]"); } 
@@ -109,10 +111,10 @@ SKIP: {
                 elsif($test->[0] eq 'like')     { like(     $book->{$test->[1]}, $test->[2], ".. '$test->[1]' found [$isbn]"); } 
                 elsif($test->[0] eq 'unlike')   { unlike(   $book->{$test->[1]}, $test->[2], ".. '$test->[1]' found [$isbn]"); }
 
+                $fail = 1   unless(defined $book->{$test->[1]} || ($test->[0] ne 'ok' && !defined $test->[2]));
             }
 
-            #use Data::Dumper;
-            #diag("book=[".Dumper($book)."]");
+            diag("book=[".Dumper($book)."]")    if($fail);
         }
     }
 }

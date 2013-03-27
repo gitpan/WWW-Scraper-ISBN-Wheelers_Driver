@@ -4,13 +4,13 @@ use strict;
 use warnings;
 
 use vars qw($VERSION @ISA);
-$VERSION = '0.09';
+$VERSION = '0.10';
 
 #--------------------------------------------------------------------------
 
 =head1 NAME
 
-WWW::Scraper::ISBN::Wheelers_Driver - Search drivers for Wheelers online book catalog.
+WWW::Scraper::ISBN::Wheelers_Driver - Search drivers for the Wheelers' online book catalog.
 
 =head1 SYNOPSIS
 
@@ -18,7 +18,7 @@ See parent class documentation (L<WWW::Scraper::ISBN::Driver>)
 
 =head1 DESCRIPTION
 
-Searches for book information from the Wheelers' online catalog.
+Searches for book information from the Wheelers' online book catalog.
 
 =cut
 
@@ -151,7 +151,8 @@ sub search {
 		'pages'		    => $data->{pages},
 		'weight'		=> $data->{weight},
 		'width'		    => $data->{width},
-		'height'		=> $data->{height}
+		'height'		=> $data->{height},
+        'html'          => $html
 	};
 
 #use Data::Dumper;
@@ -197,9 +198,9 @@ be forthcoming, please feel free to (politely) remind me.
 
 =head1 COPYRIGHT & LICENSE
 
-  Copyright (C) 2010-2012 Barbie for Miss Barbell Productions
+  Copyright (C) 2010-2013 Barbie for Miss Barbell Productions
 
-  This module is free software; you can redistribute it and/or
+  This distribution is free software; you can redistribute it and/or
   modify it under the Artistic Licence v2.
 
 =cut

@@ -10,7 +10,7 @@ WriteMakefile(
     AUTHOR              => 'Barbie <barbie@cpan.org>',
     NAME                => 'WWW::Scraper::ISBN::Wheelers_Driver',
     VERSION_FROM        => 'lib/WWW/Scraper/ISBN/Wheelers_Driver.pm',
-    ABSTRACT            => q|Search driver for Wheelers' online catalog|,
+    ABSTRACT            => q|Search driver for the Wheelers' online book catalog|,
     NO_META             => 1,
     PREREQ_PM           => {
 
@@ -20,8 +20,9 @@ WriteMakefile(
         'WWW::Mechanize'                => '1.60',
 
         # build/test prereqs
-        'Test::More'                    => '0.70',
-        'IO::File'                      => '0'
+        'Data::Dumper'                  => '0',
+        'IO::File'                      => '0',
+        'Test::More'                    => '0.70'
 
     }
 );
