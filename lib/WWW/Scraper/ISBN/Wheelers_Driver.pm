@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw($VERSION @ISA);
-$VERSION = '0.10';
+$VERSION = '0.11';
 
 #--------------------------------------------------------------------------
 
@@ -110,12 +110,13 @@ sub search {
     ($data->{pubdate})                  = $html =~ m!<th>International Publication Date</th>\s*<td>([^<]+)</td>!i;
     ($data->{isbn13})                   = $html =~ m!<th>ISBN-13</th>\s*<td>(\d+)</td>!i;
     ($data->{isbn10})                   = $html =~ m!<th>ISBN-10</th>\s*<td>(\d+)</td>!i;
-    ($data->{binding})                  = $html =~ m!<th>Format</th>\s*<td>([^<]+)</td>!s;
+    ($data->{binding})                  = $html =~ m!<th>Format</th>\s*<td>([^<]+)<!s;
     ($data->{pages})                    = $html =~ m!<th>Number of Pages</th>\s*<td>([^<]+)</td>!s;
     ($data->{width},$data->{height})    = $html =~ m!<tr>\s*<th>Dimensions</th>\s*<td>Width:\s*([\d.]+)mm<br />Height:\s*([\d.]+)mm<br />(?:Spine:\s*([\d.]+)mm)?</td>\s*</tr>!s;
     ($data->{weight})                   = $html =~ m!<tr>\s*<th>Weight</th>\s*<td>(\d+)g</td>\s*</tr>!s;
     ($data->{description})              = $html =~ m!<h2>Description of this book</h2>\s*<p>([^<]+)</p>!i;
 
+    $data->{binding} =~ s/,.*//;
     for(qw(image thumb)) {
         next unless(defined $data->{$_});
         next if($data->{$_} =~ m!^http://!);
@@ -198,7 +199,7 @@ be forthcoming, please feel free to (politely) remind me.
 
 =head1 COPYRIGHT & LICENSE
 
-  Copyright (C) 2010-2013 Barbie for Miss Barbell Productions
+  Copyright (C) 2010-2014 Barbie for Miss Barbell Productions
 
   This distribution is free software; you can redistribute it and/or
   modify it under the Artistic Licence v2.

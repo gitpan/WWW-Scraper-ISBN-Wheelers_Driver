@@ -130,7 +130,7 @@ sub pingtest {
 
     eval { system($cmd) }; 
     if($@) {                # can't find ping, or wrong arguments?
-        diag();
+        diag($@);
         return 1;
     }
 
