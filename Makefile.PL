@@ -8,7 +8,7 @@ use ExtUtils::MakeMaker;
 
 WriteMakefile(
     AUTHOR              => 'Barbie <barbie@cpan.org>',
-    NAME                => 'WWW::Scraper::ISBN::Wheelers_Driver',
+    NAME                => 'WWW-Scraper-ISBN-Wheelers_Driver',
     VERSION_FROM        => 'lib/WWW/Scraper/ISBN/Wheelers_Driver.pm',
     ABSTRACT            => q|Search driver for the Wheelers' online book catalog|,
     NO_META             => 1,
