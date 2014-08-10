@@ -1,6 +1,6 @@
 {
     "name": "WWW-Scraper-ISBN-Wheelers_Driver",
-    "version": "0.12",
+    "version": "0.13",
     "abstract": "Search driver for the Wheelers' online book catalog",
     "author": ["Barbie <barbie@cpan.org>"],
 
@@ -11,7 +11,7 @@
         "version": "2",
         "url": "http://search.cpan.org/dist/CPAN-Meta/lib/CPAN/Meta/Spec.pm"
     },
-    "generated_by": "Hand 1.0",
+    "generated_by": "Barbie 1.0",
     "keywords" : [
         "isbn",
         "books",
@@ -22,9 +22,9 @@
         "runtime" : {
             "requires" : {
                 "perl": "5.006",
-                "WWW::Scraper::ISBN": "0.25",
-                "WWW::Scraper::ISBN::Driver": "0.18",
-                "WWW::Mechanize": "1.60"
+                "WWW::Mechanize": "1.60",
+                "WWW::Scraper::ISBN": "1.00",
+                "WWW::Scraper::ISBN::Driver": "1.00"
             }
         },
         "test" : {
@@ -45,7 +45,7 @@
     "provides": {
         "WWW::Scraper::ISBN::Wheelers_Driver": {
             "file": "lib/WWW/Scraper/ISBN/Wheelers_Driver.pm",
-            "version": "0.12"
+            "version": "0.13"
         }
     },
     "no_index": {

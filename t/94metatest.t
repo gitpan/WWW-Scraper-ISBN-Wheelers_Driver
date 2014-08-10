@@ -17,12 +17,17 @@ my $meta = meta_spec_ok(undef,undef,@_);
 use WWW::Scraper::ISBN::Wheelers_Driver;
 my $version = $WWW::Scraper::ISBN::Wheelers_Driver::VERSION;
 
-is($meta->{version},$version,
-    'META.yml distribution version matches');
-
 if($meta->{provides}) {
     for my $mod (keys %{$meta->{provides}}) {
         is($meta->{provides}{$mod}{version},$version,
             "META.yml entry [$mod] version matches");
+
+        eval "require $mod";
+        my $VERSION = '$' . $mod . '::VERSION';
+        my $v = eval "$VERSION";
+        is($meta->{provides}{$mod}{version},$v,
+            "META.json entry [$mod] version matches module version");
+
+        isnt($meta->{provides}{$mod}{version},0);
     }
 }

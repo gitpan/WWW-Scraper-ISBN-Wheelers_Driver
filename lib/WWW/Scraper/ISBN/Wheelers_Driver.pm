@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw($VERSION @ISA);
-$VERSION = '0.12';
+$VERSION = '0.13';
 
 #--------------------------------------------------------------------------
 
@@ -37,7 +37,7 @@ use WWW::Mechanize;
 ###########################################################################
 # Constants
 
-use constant	SEARCH	=> 'http://www.wheelers.co.nz/search/results/?query=';
+use constant    SEARCH  => 'http://www.wheelers.co.nz/search/results/?query=';
 
 #--------------------------------------------------------------------------
 
@@ -50,7 +50,7 @@ use constant	SEARCH	=> 'http://www.wheelers.co.nz/search/results/?query=';
 
 =item C<search()>
 
-Creates a query string, then passes the appropriate form fields to the 
+Creates a query string, then passes the appropriate form fields to the
 Wheelers server.
 
 The returned page should be the correct catalog page for that ISBN. If not the
@@ -58,7 +58,7 @@ function returns zero and allows the next driver in the chain to have a go. If
 a valid page is returned, the following fields are returned via the book hash:
 
   isbn          (now returns isbn13)
-  isbn10        
+  isbn10
   isbn13
   ean13         (industry name)
   author
@@ -81,24 +81,24 @@ The book_link and image_link refer back to the Wheelers website.
 =cut
 
 sub search {
-	my $self = shift;
-	my $isbn = shift;
-	$self->found(0);
-	$self->book(undef);
+    my $self = shift;
+    my $isbn = shift;
+    $self->found(0);
+    $self->book(undef);
 
-	my $mech = WWW::Mechanize->new();
+    my $mech = WWW::Mechanize->new();
     $mech->agent_alias( 'Linux Mozilla' );
 
     eval { $mech->get( SEARCH . $isbn ) };
     return $self->handler("Wheelers website appears to be unavailable.")
-	    if($@ || !$mech->success() || !$mech->content());
+        if($@ || !$mech->success() || !$mech->content());
 
-	# The Book page
+    # The Book page
     my $html = $mech->content();
 
-	return $self->handler("Failed to find that book on Wheelers website.")
-		if($html =~ m!Your search returned <b>0 results</b>!si);
-    
+    return $self->handler("Failed to find that book on Wheelers website.")
+        if($html =~ m!Your search returned <b>0 results</b>!si);
+
 #print STDERR "\n# html=[\n$html\n]\n";
 
     my $data;
@@ -129,39 +129,39 @@ sub search {
 #use Data::Dumper;
 #print STDERR "\n# " . Dumper($data);
 
-	return $self->handler("Could not extract data from Wheelers result page.")
-		unless(defined $data);
+    return $self->handler("Could not extract data from Wheelers result page.")
+        unless(defined $data);
 
-	# trim top and tail
-	foreach (keys %$data) { next unless(defined $data->{$_});$data->{$_} =~ s/^\s+//;$data->{$_} =~ s/\s+$//; }
+    # trim top and tail
+    foreach (keys %$data) { next unless(defined $data->{$_});$data->{$_} =~ s/^\s+//;$data->{$_} =~ s/\s+$//; }
 
-	my $bk = {
-		'ean13'		    => $data->{isbn13},
-		'isbn13'		=> $data->{isbn13},
-		'isbn10'		=> $data->{isbn10},
-		'isbn'			=> $data->{isbn13},
-		'author'		=> $data->{author},
-		'title'			=> $data->{title},
-		'book_link'		=> $mech->uri(),
-		'image_link'	=> $data->{image},
-		'thumb_link'	=> $data->{thumb},
-		'description'	=> $data->{description},
-		'pubdate'		=> $data->{pubdate},
-		'publisher'		=> $data->{publisher},
-		'binding'	    => $data->{binding},
-		'pages'		    => $data->{pages},
-		'weight'		=> $data->{weight},
-		'width'		    => $data->{width},
-		'height'		=> $data->{height},
+    my $bk = {
+        'ean13'         => $data->{isbn13},
+        'isbn13'        => $data->{isbn13},
+        'isbn10'        => $data->{isbn10},
+        'isbn'          => $data->{isbn13},
+        'author'        => $data->{author},
+        'title'         => $data->{title},
+        'book_link'     => $mech->uri(),
+        'image_link'    => $data->{image},
+        'thumb_link'    => $data->{thumb},
+        'description'   => $data->{description},
+        'pubdate'       => $data->{pubdate},
+        'publisher'     => $data->{publisher},
+        'binding'       => $data->{binding},
+        'pages'         => $data->{pages},
+        'weight'        => $data->{weight},
+        'width'         => $data->{width},
+        'height'        => $data->{height},
         'html'          => $html
-	};
+    };
 
 #use Data::Dumper;
 #print STDERR "\n# book=".Dumper($bk);
 
     $self->book($bk);
-	$self->found(1);
-	return $self->book;
+    $self->found(1);
+    return $self->book;
 }
 
 1;

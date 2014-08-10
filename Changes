@@ -1,8 +1,12 @@
 Revision history for WWW-Scraper-ISBN-Wheelers_Driver
 =====================================================
 
-0.12    2014-04-30
+0.13    2014-08-10
+        - minor package file updates.
+        - extended test suite.
+        - upgrade to WWW-Scraper-ISBN-1.00.
 
+0.12    2014-04-30
         - test data update.
         - fixed distribution name in META.
 
